@@ -1,0 +1,34 @@
+version: "3"
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - "3306:3306"
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ./tmp/db:/var/lib/mysql
+    cap_add:
+      - SYS_NICE
+
+  app:
+    build: .
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - .:/myapp
+    depends_on:
+      - db
+    environment:
+      RAILS_ENV: production
+    tty: true
+    stdin_open: true
+
+  web:
+    build: ./nginx
+    volumes:
+      - ./public:/usr/share/nginx/public
+    ports:
+      - 80:80
+    depends_on:
+      - app
