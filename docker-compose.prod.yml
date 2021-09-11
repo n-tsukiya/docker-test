@@ -21,6 +21,7 @@ services:
       - db
     environment:
       RAILS_ENV: production
+      SECRET_KEY_BASE: "6c744e2d03335dcd2b877291bdbf551fa00d9e9f69ca1ddb24f3a5e9881c30621774313d95a33ecdffe21aefcab7edc89ed5dba9d7be1865e024fd546ff9342d"
     tty: true
     stdin_open: true
 
